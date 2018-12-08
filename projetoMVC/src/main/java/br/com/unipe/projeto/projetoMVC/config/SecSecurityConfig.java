@@ -1,43 +1,40 @@
 package br.com.unipe.projeto.projetoMVC.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import br.com.unipe.projeto.projetoMVC.jwt.JWTAuthenticationFilter;
+import br.com.unipe.projeto.projetoMVC.jwt.JWTLoginFilter;
+
 
 @Configuration
 @EnableWebSecurity
 public class SecSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
-	protected void configure(final AuthenticationManagerBuilder auth) throws Exception{
-		auth.inMemoryAuthentication()
-			.withUser("user1").password("user1Pass").roles("USER")
+	protected void configure(HttpSecurity httpSecurity) throws Exception{
+		httpSecurity.csrf().disable().authorizeRequests()
+			.antMatchers("/home").permitAll()
+			.antMatchers(HttpMethod.POST, "/login").permitAll()
+			.anyRequest().authenticated()
 			.and()
-			.withUser("user2").password("user2Pass").roles("USER")
-			.and()
-			.withUser("admin").password("adminPass").roles("ADMIN");
+			
+			.addFilterBefore(new JWTLoginFilter("/login",authenticationManager()),
+					UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new JWTAuthenticationFilter(), 
+					UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Override
-	protected void configure(final HttpSecurity http) throws Exception{
-		http
-			.csrf().disable()
-		    .authorizeRequests()
-		    .antMatchers("/login*").permitAll()
-		    .antMatchers("/contas").hasRole("ADMIN")
-		    .antMatchers("/criar-conta").hasRole("USER")
-		    .antMatchers("/criar-pessoa").permitAll()
-		    .anyRequest().authenticated()
-		    .and()
-		    .formLogin()
-		    .loginProcessingUrl("/login")
-		    .defaultSuccessUrl("/")
-		    .and()
-		    .logout()
-		    .logoutUrl("/logout")
-		    .deleteCookies("JSESSIONID");
+	protected void configure(AuthenticationManagerBuilder auth)throws Exception{
+		auth.inMemoryAuthentication()
+			.withUser("admin")
+			.password("password")
+			.roles("ADMIN");
 	}
-
 }

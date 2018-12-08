@@ -30,7 +30,6 @@ public class Transacao {
 	private Long idTransacao;
 	
 	@ManyToOne
-	@JoinColumn(name="idConta")
 	private Conta idConta;
 	
 	@NotNull(message="O campo valor não deve ser nulo")
@@ -45,6 +44,7 @@ public class Transacao {
 	public Transacao() {
 		
 	}
+
 	
 	public Transacao(Long idTransacao, Conta idConta, BigDecimal valor, Date dataTransacao){
 		this.idTransacao = idTransacao;

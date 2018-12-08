@@ -51,4 +51,8 @@ public class PessoaService implements PessoaServiceImpl {
 		return pessoaRepository.findAll();
 	}
 
+	public Pessoa atualizarPessoa(Pessoa pessoa) {
+		return pessoaRepository.save(pessoa);
+	}
+
 }

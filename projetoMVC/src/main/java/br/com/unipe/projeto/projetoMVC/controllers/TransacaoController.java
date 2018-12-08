@@ -37,7 +37,7 @@ public class TransacaoController {
 	 * @param transacao
 	 */
 	@PostMapping("transacao/deposito")
-	public ResponseEntity<?> depositarEmConta(@RequestBody Transacao transacao) {
+	public ResponseEntity<Transacao> depositarEmConta(@RequestBody Transacao transacao) {
 		return new ResponseEntity<>(transacaoService.depositar(transacao), HttpStatus.CREATED);
 	}
 
@@ -48,7 +48,7 @@ public class TransacaoController {
 	 * @return
 	 */
 	@PostMapping("transacao/saque")
-	public ResponseEntity<Transacao> sacarEmConta(@Valid @RequestBody Transacao transacao) {
+	public ResponseEntity<Transacao> sacarEmConta(@RequestBody Transacao transacao) {
 		return new ResponseEntity<>(transacaoService.sacar(transacao), HttpStatus.CREATED);
 	}
 

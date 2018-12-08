@@ -82,4 +82,8 @@ public class ContaService implements ContaServiceImpl {
 		contaRepository.save(conta);
 	}
 
+	public void deletarConta(Long idConta) {
+		contaRepository.delete(idConta);
+	}
+
 }

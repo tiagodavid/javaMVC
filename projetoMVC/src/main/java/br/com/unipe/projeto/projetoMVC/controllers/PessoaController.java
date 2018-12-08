@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,5 +46,10 @@ public class PessoaController {
 	@GetMapping("/pessoa")
 	public ResponseEntity<List<Pessoa>> listarTodasPessoas(){
 		return new ResponseEntity<>(pessoaService.listarPessoas(), HttpStatus.OK);
+	}
+	
+	@PutMapping("/pessoa/atualiza")
+	public ResponseEntity<Pessoa> atualizarPessoa(@Valid @RequestBody Pessoa pessoa){
+		return new ResponseEntity<>(pessoaService.atualizarPessoa(pessoa), HttpStatus.OK);
 	}
 }
